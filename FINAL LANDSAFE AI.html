@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LANDSAFE AI</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--tx:#0f1b3d;--mu:#5b6785;--bd:#e3e8f1;--ac:#1e3a8a;--sf:#eef2f9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1220;--card:#131c30;--tx:#e8edf8;--mu:#93a0bd;--bd:#25314d;--ac:#8ab4ff;--sf:#1a2540}}
+:root[data-theme="dark"]{--bg:#0b1220;--card:#131c30;--tx:#e8edf8;--mu:#93a0bd;--bd:#25314d;--ac:#8ab4ff;--sf:#1a2540}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.app{display:grid;grid-template-columns:224px 1fr;min-height:100vh}
+aside{background:var(--card);border-right:1px solid var(--bd);padding:14px 10px;position:sticky;top:0;height:100vh;overflow:auto}
+.logo{display:flex;gap:9px;align-items:center;padding:4px 8px 14px}.logo b{font-size:16px;letter-spacing:.5px}.logo small{display:block;color:var(--mu);font-size:10px}
+nav button{display:flex;gap:10px;width:100%;align-items:center;border:0;background:none;color:var(--mu);padding:9px 10px;border-radius:10px;cursor:pointer;font:inherit;text-align:left;transition:.15s}
+nav button:hover{background:var(--sf)}nav button.on{background:var(--ac);color:#fff}nav i{font-style:normal;width:16px;text-align:center}
+main{padding:14px 18px 30px;min-width:0}
+.top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}.top .sp{flex:1}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,27,61,.06)}
+.card h3{margin:0 0 10px;font-size:14px}.g{display:grid;gap:12px}.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.g6{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.split{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:12px}
+button.b,select,input,textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:9px;padding:7px 11px}
+button.b{cursor:pointer;transition:.15s}button.b:hover{background:var(--sf)}button.p{background:var(--ac);color:#fff;border-color:var(--ac)}button.p:hover{opacity:.9;background:var(--ac)}button:disabled{opacity:.45;cursor:not-allowed}
+.bd{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700;color:#fff}.tag{background:var(--sf);color:var(--mu);padding:2px 8px;border-radius:6px;font-size:11px}
+.stat b{font-size:26px;display:block}.stat span{color:var(--mu);font-size:12px}
+.map{width:100%;height:auto;background:var(--sf);border-radius:12px;display:block}.map text{fill:var(--mu);font-size:9px}
+.pulse{animation:pl 1.6s infinite}@keyframes pl{50%{opacity:.05}}
+.bar{display:grid;grid-template-columns:120px 1fr 44px;gap:8px;align-items:center;margin:6px 0;font-size:12px}.bar i{display:block;height:9px;border-radius:9px;background:var(--sf);position:relative}.bar i u{position:absolute;inset:0 auto 0 0;border-radius:9px;transition:width .5s}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:8px}.kv div{background:var(--sf);border-radius:10px;padding:8px}.kv small{color:var(--mu);display:block;font-size:11px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--bd)}th{color:var(--mu);font-weight:600;font-size:12px}.sc{overflow-x:auto}
+.banner{background:#dc2626;color:#fff;padding:10px 14px;border-radius:12px;margin-bottom:12px;font-weight:700}
+.note{font-size:11px;color:var(--mu)}.warn{border-left:4px solid #f97316;background:var(--sf);padding:8px 10px;border-radius:8px;font-size:12px;margin:8px 0}
+.flow{display:flex;flex-direction:column;align-items:center;gap:4px}.flow div{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:8px 16px;min-width:230px;text-align:center;font-weight:600;font-size:13px}.flow span{color:var(--mu)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.al{border-left:5px solid;padding:10px 12px;margin-bottom:8px}
+label{display:block;font-size:12px;color:var(--mu);margin:8px 0 3px}input,select,textarea{width:100%}input[type=range]{padding:0}
+#toast{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:6px;z-index:9}#toast div{background:var(--tx);color:var(--bg);padding:9px 14px;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.25);animation:in .25s}@keyframes in{from{transform:translateY(8px);opacity:0}}
+pre{background:var(--sf);padding:10px;border-radius:10px;overflow:auto;font-size:12px;margin:8px 0}
+@media(max-width:860px){.app{grid-template-columns:1fr}aside{position:static;height:auto;display:flex;flex-direction:column;padding:8px}nav{display:flex;overflow-x:auto;gap:4px}nav button{white-space:nowrap;width:auto}.logo{padding-bottom:6px}.split{grid-template-columns:1fr}main{padding:12px}}
+#lg{position:fixed;inset:0;display:none;overflow:auto;background:var(--bg);z-index:20;padding:16px}#lg>.card{width:100%;max-width:370px;margin:auto}#le{color:#dc2626;font-size:13px;min-height:18px;margin:8px 0 0}
+body.pm .sens{filter:blur(6px)}code{font-size:12px}
+/* ===== v3: unique page themes, decoration, equipment ===== */
+:root{--pa:#1e3a8a;--pb:#3b82f6;--glow:rgba(59,130,246,.18)}
+body[data-pg=dash]{--pa:#1e3a8a;--pb:#3b82f6}
+body[data-pg=map]{--pa:#0f766e;--pb:#14b8a6}
+body[data-pg=engine]{--pa:#6d28d9;--pb:#a78bfa}
+body[data-pg=iot]{--pa:#0369a1;--pb:#38bdf8}
+body[data-pg=equip]{--pa:#b45309;--pb:#fbbf24}
+body[data-pg=rep]{--pa:#be123c;--pb:#fb7185}
+body[data-pg=rec]{--pa:#475569;--pb:#94a3b8}
+body[data-pg=alerts]{--pa:#c2410c;--pb:#fb923c}
+body[data-pg=sos]{--pa:#b91c1c;--pb:#f87171}
+body[data-pg=route]{--pa:#15803d;--pb:#4ade80}
+body[data-pg=prio]{--pa:#a21caf;--pb:#e879f9}
+body[data-pg=ana]{--pa:#4338ca;--pb:#818cf8}
+body[data-pg=src]{--pa:#0e7490;--pb:#22d3ee}
+body[data-pg=arch]{--pa:#334155;--pb:#64748b}
+body[data-pg=set]{--pa:#52525b;--pb:#a1a1aa}
+body[data-pg=me]{--pa:#9333ea;--pb:#c084fc}
+body[data-pg=aud]{--pa:#57534e;--pb:#a8a29e}
+body[data-pg=priv]{--pa:#047857;--pb:#34d399}
+body{background-image:radial-gradient(1200px 500px at 90% -10%,var(--glow),transparent 60%),radial-gradient(900px 400px at -10% 110%,var(--glow),transparent 60%);background-attachment:fixed;transition:background .4s}
+aside{background:linear-gradient(180deg,var(--card),var(--sf))}
+nav button.on{background:linear-gradient(135deg,var(--pa),var(--pb));box-shadow:0 6px 16px -6px var(--pa)}
+nav button:hover i{transform:scale(1.25) rotate(-6deg)}nav i{transition:.2s}
+.card{position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-2px);box-shadow:0 10px 24px -12px rgba(15,27,61,.35)}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--pa),var(--pb));opacity:.85}
+.card h3{display:flex;align-items:center;gap:6px}
+.card h3::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--bd),transparent)}
+.stat b{background:linear-gradient(135deg,var(--pa),var(--pb));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero{position:relative;overflow:hidden;border-radius:18px;padding:18px 20px 44px;margin-bottom:14px;color:#fff;background:linear-gradient(120deg,var(--pa),var(--pb));box-shadow:0 14px 30px -16px var(--pa)}
+.hero h1{margin:0;font-size:22px;letter-spacing:.3px;position:relative}
+.hero p{margin:4px 0 0;opacity:.92;max-width:560px;position:relative}
+.hero .ic{position:absolute;right:20px;top:8px;font-size:54px;opacity:.9;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3));animation:fl 4s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-6px)}}
+.hero .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;position:relative}
+.hero .chips span{background:rgba(255,255,255,.18);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.3);padding:2px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.hero svg.mt{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:42px}
+.hero .rain{position:absolute;inset:0;background-image:linear-gradient(105deg,transparent 45%,rgba(255,255,255,.35) 50%,transparent 55%);background-size:22px 38px;opacity:.28;animation:rn 1.1s linear infinite}
+@keyframes rn{to{background-position:-22px 38px}}
+.eq{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.eq .it{padding-top:16px}.eq .big{font-size:26px;font-weight:800;margin:2px 0}
+.eq .hd{display:flex;gap:10px;align-items:center}.eq .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,var(--pa),var(--pb));color:#fff;box-shadow:0 6px 14px -6px var(--pa)}
+.eq .meta{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.eq.off .it .big{opacity:.35}.eq .it.dis{opacity:.55}
+.batt{height:7px;border-radius:9px;background:var(--sf);overflow:hidden;margin:6px 0}.batt u{display:block;height:100%;border-radius:9px;transition:width .5s}
+.glow{animation:gl 2s infinite}@keyframes gl{50%{box-shadow:0 0 0 5px rgba(220,38,38,.18)}}
+.ticker{overflow:hidden;white-space:nowrap;border-radius:10px;background:var(--sf);border:1px solid var(--bd);margin-bottom:12px;font-size:12px;color:var(--mu)}
+.ticker div{display:inline-block;padding:6px 0;animation:tk 38s linear infinite}.ticker span{margin:0 22px}
+@keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.sl text{font-size:9px;fill:var(--tx)}
+@media(prefers-reduced-motion:reduce){.hero .rain,.hero .ic,.ticker div,.glow{animation:none}}
+@media(max-width:860px){.hero .ic{font-size:36px}.hero h1{font-size:18px}}
+/* ===== login decoration ===== */
+#lg{background:linear-gradient(160deg,#07122e 0%,#0f2a6b 48%,#1e3a8a 100%);color:#e8edf8;padding:24px;gap:28px;grid-template-columns:minmax(0,1.15fr) minmax(320px,400px);align-items:center;justify-content:center}
+#lg .lgbg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+#lg .lgbg .rain{position:absolute;inset:-40px;background-image:linear-gradient(105deg,transparent 46%,rgba(173,205,255,.5) 50%,transparent 54%);background-size:26px 46px;opacity:.22;animation:rn 1.2s linear infinite}
+#lg .lgbg .glow1{position:absolute;width:520px;height:520px;right:-120px;top:-160px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,.35),transparent 65%);animation:lgp 6s ease-in-out infinite}
+#lg .lgbg .glow2{position:absolute;width:560px;height:560px;left:-180px;bottom:-200px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.28),transparent 65%);animation:lgp 7s ease-in-out infinite reverse}
+@keyframes lgp{50%{transform:scale(1.15);opacity:.7}}
+#lg .lgbg svg{position:absolute;left:0;right:0;bottom:0;width:100%;height:42vh;min-height:220px}
+#lg .lgbg .dot{position:absolute;width:10px;height:10px;border-radius:50%;background:#f97316}
+#lg .lgbg .dot::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid #f97316;animation:lgr 2.2s ease-out infinite}
+@keyframes lgr{from{transform:scale(.4);opacity:.9}to{transform:scale(2.2);opacity:0}}
+.lgb,#lg>.card{position:relative;z-index:1}
+.lgb{padding:8px 6px}
+.lgb .big{display:flex;align-items:center;gap:14px}
+.lgb .big svg{filter:drop-shadow(0 8px 18px rgba(249,115,22,.45));animation:fl 4s ease-in-out infinite}
+.lgb h1{margin:0;font-size:38px;letter-spacing:1.5px;line-height:1.05;background:linear-gradient(90deg,#fff,#9ec1ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lgb .tg{margin:4px 0 0;color:#a9bde6;font-size:13px;letter-spacing:.4px}
+.lgb p.ds{margin:18px 0 14px;max-width:470px;font-size:15px;color:#d5def2}
+.lgb .ft{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));max-width:520px}
+.lgb .ft div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(6px);border-radius:14px;padding:10px 12px;font-size:12px;color:#c9d6f2;transition:.2s}
+.lgb .ft div:hover{transform:translateY(-3px);background:rgba(255,255,255,.14)}
+.lgb .ft b{display:block;color:#fff;font-size:13px;margin-bottom:2px}
+.lgb .st{display:flex;gap:22px;margin-top:18px;flex-wrap:wrap}.lgb .st b{display:block;font-size:24px;color:#fff}.lgb .st span{font-size:11px;color:#a9bde6}
+#lg>.card{margin:0;max-width:400px;width:100%;padding:22px;border-radius:20px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.35);box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+#lg>.card:hover{transform:none}
+#lg>.card::before{height:4px;background:linear-gradient(90deg,#f97316,#1e3a8a,#38bdf8)}
+#lg>.card .logo{display:none}
+#lg>.card .wb{margin:0 0 4px;font-size:20px;font-weight:800;color:var(--tx)}#lg>.card .ws{margin:0 0 6px;color:var(--mu);font-size:13px}
+#lg .dm{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 2px}
+#lg .dm button{border:1px solid var(--bd);background:var(--sf);color:var(--tx);border-radius:99px;padding:3px 11px;font:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:.15s}
+#lg .dm button:hover{background:var(--ac);color:#fff;border-color:var(--ac)}
+#lg input:focus,#lg select:focus{outline:2px solid #3b82f6;outline-offset:1px}
+#lsb{background:linear-gradient(135deg,#1e3a8a,#3b82f6)!important;border:0!important;padding:10px!important;font-weight:700;letter-spacing:.3px;box-shadow:0 10px 20px -10px #1e3a8a}
+@media(max-width:860px){#lg{grid-template-columns:1fr;gap:14px;padding:14px;align-content:start}.lgb h1{font-size:28px}.lgb p.ds,.lgb .ft,.lgb .st{display:none}#lg>.card{margin:0 auto}}
+@media(prefers-reduced-motion:reduce){#lg .lgbg .rain,#lg .lgbg .glow1,#lg .lgbg .glow2,.lgb .big svg,#lg .lgbg .dot::after{animation:none}}
+</style></head><body>
+<div class="app"><aside><div class="logo"><svg width="34" height="34" viewBox="0 0 34 34"><rect width="34" height="34" rx="9" fill="#1e3a8a"/><path d="M4 27 13 12l5 7 3-4 9 12z" fill="#fff"/><path d="M20 5a8 8 0 0 1 8 8M20 8.5a4.5 4.5 0 0 1 4.5 4.5" stroke="#f97316" stroke-width="2" fill="none" stroke-linecap="round"/></svg><div><b>LANDSAFE AI</b><small>Predict. Explain. Prioritize. Alert. Verify.</small></div></div><nav id="nav"></nav></aside>
+<main><div class="top" id="top"></div><div id="pg"></div></main></div><div id="lg"><div class="lgbg"><div class="glow1"></div><div class="glow2"></div><div class="rain"></div><span class="dot" style="left:62%;top:30%"></span><span class="dot" style="left:18%;top:52%;background:#eab308"></span><span class="dot" style="left:78%;top:58%;background:#dc2626"></span><svg viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0 300V190l120-70 110 60 140-110 130 90 150-80 120 70 140-100 160 90 130-50v300z" fill="#12296b" opacity=".75"/><path d="M0 300V230l150-60 120 50 160-70 160 60 140-40 140 50 150-60 180 40v150z" fill="#0b1b4a" opacity=".9"/><path d="M0 300V265l200-40 180 30 200-35 220 30 200-25 200 30v45z" fill="#07122e"/></svg></div>
+<div class="lgb"><div class="big"><svg width="64" height="64" viewBox="0 0 34 34"><rect width="34" height="34" rx="9" fill="#1e3a8a" stroke="rgba(255,255,255,.35)"/><path d="M4 27 13 12l5 7 3-4 9 12z" fill="#fff"/><path d="M20 5a8 8 0 0 1 8 8M20 8.5a4.5 4.5 0 0 1 4.5 4.5" stroke="#f97316" stroke-width="2" fill="none" stroke-linecap="round"/></svg><div><h1>LANDSAFE AI</h1><div class="tg">Predict · Explain · Prioritize · Alert · Verify</div></div></div>
+<p class="ds">AI-assisted landslide early warning for North East India. Live risk scores, field equipment, multilingual alerts and safe routes in one place.</p>
+<div class="ft"><div><b>🧠 Explainable AI</b>See why a zone's risk changed</div><div><b>🛠️ Field equipment</b>Rain gauges, piezometers, GNSS, sirens</div><div><b>🚨 Multilingual alerts</b>English, Hindi, Assamese, Bengali</div><div><b>🧭 Safe routes</b>Score a journey before you travel</div></div>
+<div class="st"><div><b>16</b><span>Monitored zones</span></div><div><b>8</b><span>NER states</span></div><div><b>12</b><span>Equipment types</span></div></div></div>
+<div class="card" role="form" onkeydown="if(event.key==='Enter'){event.preventDefault();doAuth()}"><div class="logo" style="padding:0 0 12px"><svg width="34" height="34" viewBox="0 0 34 34"><rect width="34" height="34" rx="9" fill="#1e3a8a"/><path d="M4 27 13 12l5 7 3-4 9 12z" fill="#fff"/><path d="M20 5a8 8 0 0 1 8 8M20 8.5a4.5 4.5 0 0 1 4.5 4.5" stroke="#f97316" stroke-width="2" fill="none" stroke-linecap="round"/></svg><div><b>LANDSAFE AI</b><small>Predict. Explain. Prioritize. Alert. Verify.</small></div></div>
+<div class="wb">Welcome back</div><div class="ws">Sign in to the monitoring console</div><div class="dm" aria-label="Demo accounts"><button type="button" onclick="dm('admin')">Admin</button><button type="button" onclick="dm('officer')">Officer</button><button type="button" onclick="dm('field')">Field</button><button type="button" onclick="dm('citizen')">Citizen</button></div><div id="sf" style="display:none"><label for="ln">Full name</label><input id="ln" autocomplete="name"><label for="lr">Account type</label><select id="lr"><option>Citizen</option><option>Field Officer</option></select></div><label for="lu">Username</label><input id="lu" autocomplete="username" required><label for="lp">Password</label><input id="lp" type="password" autocomplete="current-password" required><div id="sf2" style="display:none"><label for="lp2">Confirm password</label><input id="lp2" type="password" autocomplete="new-password"></div><div id="le" role="alert"></div><button type="button" class="b p" id="lsb" onclick="doAuth()" style="width:100%;margin-top:6px">Sign in</button><button type="button" class="b" id="lst" style="width:100%;margin-top:6px" onclick="tog()">New user? Create an account</button>
+<p class="note" style="margin-bottom:0">Demo accounts: admin, officer, field, citizen (password: username + 123). This single-file build checks credentials in the browser, for demonstration only. New accounts (Citizen or Field Officer) are saved only in this browser, with the password hashed.</p></div></div><div id="toast"></div>
+<script>
+const LV=[['LOW','#16a34a'],['MODERATE','#eab308'],['HIGH','#f97316'],['CRITICAL','#dc2626']];
+const Z=[
+{n:'Tawang Sector',s:'Arunachal Pradesh',la:27.59,lo:91.86,rain:25,soil:40,sl:38,h:7,rp:1,ex:2,inf:3,rd:'NH-13'},
+{n:'Ziro Valley',s:'Arunachal Pradesh',la:27.55,lo:93.83,rain:28,soil:38,sl:30,h:3,rp:0,ex:1,inf:2,rd:'Ziro Rd'},
+{n:'Guwahati Hills',s:'Assam',la:26.14,lo:91.74,rain:30,soil:45,sl:26,h:5,rp:1,ex:3,inf:3,rd:'NH-27'},
+{n:'Dima Hasao Rail',s:'Assam',la:25.5,lo:93.02,rain:35,soil:48,sl:34,h:8,rp:1,ex:1,inf:3,rd:'Rail Line'},
+{n:'Senapati Slopes',s:'Manipur',la:25.27,lo:94.02,rain:30,soil:42,sl:32,h:4,rp:0,ex:2,inf:2,rd:'NH-2'},
+{n:'Cherrapunji Gorge',s:'Meghalaya',la:25.28,lo:91.7,rain:45,soil:55,sl:28,h:6,rp:0,ex:2,inf:2,rd:'SH-5'},
+{n:'Aizawl Ridge',s:'Mizoram',la:23.73,lo:92.72,rain:32,soil:44,sl:36,h:6,rp:1,ex:3,inf:2,rd:'NH-6'},
+{n:'Kohima Bypass',s:'Nagaland',la:25.67,lo:94.1,rain:27,soil:41,sl:33,h:4,rp:0,ex:2,inf:3,rd:'NH-29'},
+{n:'Gangtok NH10',s:'Sikkim',la:27.33,lo:88.61,rain:34,soil:46,sl:40,h:9,rp:2,ex:3,inf:3,rd:'NH-10'},
+{n:'Agartala Hills',s:'Tripura',la:23.83,lo:91.28,rain:20,soil:36,sl:22,h:2,rp:0,ex:1,inf:1,rd:'Local Rd'},
+{n:'Itanagar Outskirts',s:'Arunachal Pradesh',la:27.08,lo:93.61,rain:26,soil:39,sl:29,h:4,rp:0,ex:2,inf:2,rd:'NH-415'},
+{n:'Shillong Bypass',s:'Meghalaya',la:25.57,lo:91.88,rain:38,soil:50,sl:27,h:5,rp:1,ex:3,inf:3,rd:'Shillong Bypass'},
+{n:'Imphal Ring Rd',s:'Manipur',la:24.82,lo:93.94,rain:29,soil:43,sl:24,h:3,rp:0,ex:3,inf:3,rd:'Ring Rd'},
+{n:'Lunglei Slope',s:'Mizoram',la:22.89,lo:92.73,rain:33,soil:46,sl:35,h:5,rp:0,ex:2,inf:2,rd:'NH-502A'},
+{n:'Mokokchung Pass',s:'Nagaland',la:26.32,lo:94.52,rain:28,soil:40,sl:31,h:3,rp:0,ex:1,inf:2,rd:'NH-702'},
+{n:'Gyalshing Ridge',s:'Sikkim',la:27.29,lo:88.26,rain:36,soil:47,sl:37,h:6,rp:1,ex:2,inf:2,rd:'NH-510'}];
+const ST=['All NER',...new Set(Z.map(z=>z.s))];
+const EX=['','Low','Medium','High'],IN=['','Low','Major Road','Critical Road'];
+const ACT=[['Continue routine monitoring.'],['Continue monitoring and increase inspection frequency.'],['Deploy field inspection team and monitor nearby infrastructure.'],['Trigger configured emergency-warning workflow and prioritize response.']];
+const STEPS=['Inspect vulnerable slope','Monitor nearby road','Notify district disaster-management team','Prepare evacuation communication','Prioritize emergency resources'];
+const MSG={en:'High landslide risk detected. Please follow local authority instructions.',hi:'भूस्खलन का उच्च जोखिम पाया गया है। कृपया स्थानीय प्राधिकरण के निर्देशों का पालन करें।',as:'ভূমিস্খলনৰ উচ্চ বিপদ ধৰা পৰিছে। অনুগ্ৰহ কৰি স্থানীয় কৰ্তৃপক্ষৰ নিৰ্দেশ মানি চলক।',bn:'ভূমিধসের উচ্চ ঝুঁকি শনাক্ত হয়েছে। অনুগ্রহ করে স্থানীয় কর্তৃপক্ষের নির্দেশ অনুসরণ করুন।'};
+const PG=[['dash','Dashboard','▦'],['map','Risk Map','◉'],['engine','AI Risk Engine','✦'],['iot','IoT Monitoring','⌁'],['rep','Field Reports','✎'],['alerts','Alerts','⚑'],['sos','Safety Check-in','✚'],['route','Safe Route','➜'],['prio','Emergency Priority','⇅'],['ana','Analytics','▤'],['src','Data Sources','⛁'],['arch','System Architecture','⌘'],['set','Settings','⚙'],['me','My Profile','☺']];
+PG.push(['rec','Records','▥'],['aud','Audit Log','⌕'],['priv','Privacy Center','◐']);const ROLE={'Admin':PG.map(p=>p[0]),'Disaster Management Officer':PG.map(p=>p[0]).filter(p=>p!='set'&&p!='aud'),'Field Officer':['dash','map','iot','rep','rec','alerts','sos','route','priv','me'],'Citizen':['dash','map','rep','alerts','sos','route','priv','me']};
+const S={page:'dash',sel:0,lvl:0,reg:'All NER',rng:'live',live:true,net:true,role:'Admin',lang:'en',demo:false,sync:now(),pend:0,ph:null,alerts:[],reps:[
+{id:'LR-1042',loc:'Gangtok NH10',hz:'Rockfall',sv:'High',t:'08:20',st:'Verified',pend:0},{id:'LR-1043',loc:'Cherrapunji Gorge',hz:'Water Seepage',sv:'Medium',t:'09:05',st:'Pending',pend:0},{id:'LR-1041',loc:'Aizawl Ridge',hz:'Road Blockage',sv:'High',t:'07:10',st:'Resolved',pend:0},
+{id:'LR-1040',loc:'Tawang Sector',hz:'Ground Crack',sv:'Medium',t:'06:45',st:'Verified',pend:0},{id:'LR-1039',loc:'Guwahati Hills',hz:'Slope Movement',sv:'High',t:'06:10',st:'Resolved',pend:0},{id:'LR-1038',loc:'Dima Hasao Rail',hz:'Rockfall',sv:'High',t:'05:30',st:'Verified',pend:0},{id:'LR-1037',loc:'Shillong Bypass',hz:'Water Seepage',sv:'Low',t:'05:05',st:'Resolved',pend:0}]};
+const P={};let AID=100,tm=null;
+function now(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
+const W=[.3,.25,.2,.15,.1],KS=['Rainfall','Soil Moisture','Slope','Historical Events','Field Reports'];
+function risk(z,l=S.lvl,nd){const rain=Math.max(0,Math.min(220,z.rain*(1+l*5.5)+(nd?0:z.dr||0))),soil=Math.max(5,Math.min(98,z.soil+(94-z.soil)*l*.9+(nd?0:z.ds||0)));
+const f=[Math.min(rain/200,1)*100,soil,Math.min(z.sl/45,1)*100,Math.min(z.h/10,1)*100,Math.min(z.rp/5,1)*100];
+const raw=f.reduce((a,v,i)=>a+v*W[i],0)/100,score=Math.min(99,Math.round(117.8*Math.pow(raw,1.786)));
+return{rain:Math.round(rain),soil:Math.round(soil),f,score,lv:score<30?0:score<55?1:score<75?2:3}}
+function why(z){const a=risk(z,0,1),b=risk(z);const d=KS.map((k,i)=>[k,b.f[i]-a.f[i]]).filter(x=>x[1]>3).sort((x,y)=>y[1]-x[1]);
+if(!d.length)return'Risk is at baseline. No factor has changed significantly; slope and historical events set the background level.';
+const ph={Rainfall:'heavy rainfall','Soil Moisture':'rising soil moisture','Field Reports':'new field hazard reports'};
+return'Risk increased primarily due to '+d.slice(0,2).map(x=>ph[x[0]]||x[0]).join(' and ')+' (rainfall '+b.rain+' mm/24h, soil moisture '+b.soil+'%). Slope ('+z.sl+'°) and '+z.h+' past events keep susceptibility elevated.'}
+const vz=()=>Z.filter(z=>S.reg=='All NER'||z.s==S.reg);
+const px=z=>(z.lo-88)/9.5*560+20,py=z=>(29.8-z.la)/8*320+20;
+const bd=(t,c)=>`<span class="bd" style="background:${c}">${t}</span>`,lb=lv=>bd(LV[lv][0],LV[lv][1]);
+function toast(m){const e=document.createElement('div');e.textContent=m;document.getElementById('toast').append(e);setTimeout(()=>e.remove(),3200)}
+function addA(o){S.alerts.unshift({id:++AID,time:now(),st:'New',...o})}
+function chk(){Z.forEach(z=>{const r=risk(z),k=['','Moderate Risk','High Risk','Critical Risk'][r.lv];if(r.lv>=1&&r.lv>(z.pl||0)&&!S.alerts.some(a=>a.zone==z.n&&a.type==k&&a.st!='Resolved'&&a.st!='Auto-cleared')){addA({zone:z.n,type:k,lv:r.lv,reason:why(z).split(' (')[0]+'.',act:ACT[r.lv][0]});if(r.lv==3)toast('⚠️ CRITICAL LANDSLIDE RISK: '+z.n)}if(r.lv<(z.pl||0))S.alerts.forEach(a=>{if(a.zone==z.n&&a.lv!=null&&a.lv>r.lv&&a.st!='Resolved')a.st='Auto-cleared'});z.pl=r.lv})}
+function setL(v){S.lvl=v;chk();R()}
+function go(p){S.page=p;R();scrollTo(0,0)}function pick(i){S.sel=i;R()}
+function demo(){if(S.demo){clearInterval(tm);S.demo=false;setL(0);return}
+S.lvl=0;chk();S.demo=true;S.sel=0;toast('Live demo started: rainfall and soil moisture rising');tm=setInterval(()=>{S.lvl=Math.min(1,S.lvl+.06);chk();R();if(S.lvl>=1){clearInterval(tm);S.demo=false;R();toast('Demo complete: see Alerts, Action card and Priority queue')}},450)}
+function net(){S.net=!S.net;if(S.net){const n=S.reps.filter(r=>r.pend).length;S.reps.forEach(r=>r.pend=0);S.sync=now();S.pend=0;toast(n?'Synchronization complete: '+n+' report(s) uploaded':'Back online')}else toast('OFFLINE MODE: reports stored locally');R()}
+function ser(z,rg){if(rg=='live'){const h=z.hist.slice(-7);while(h.length<7)h.unshift(h[0]);return h}const a=risk(z,0).score,b=risk(z).score,L={'24h':['00h','04h','08h','12h','16h','20h','Now'],'7d':['D-6','D-5','D-4','D-3','D-2','D-1','Today'],'30d':['W-4','','W-3','','W-2','W-1','Now']}[rg],e=rg=='24h'?2:rg=='7d'?1.5:1;
+return L.map((l,i)=>{const t=i/6,v=a+(b-a)*Math.pow(t,e)+(i<6?Math.sin(i*2+z.la)*3:0);return[l,Math.max(2,Math.min(99,Math.round(v)))]})}
+function trend(z){const d=ser(z,S.rng),w=300,h=110,pts=d.map((p,i)=>[20+i*(w-30)/6,h-8-p[1]/100*(h-20)]),dl=d[6][1]-d[3][1],c=LV[risk(z).lv][1];
+return`<div class="row" style="justify-content:space-between"><h3>Risk Trend · ${z.n}</h3><div class="row">${['live','24h','7d','30d'].map(r=>`<button class="b ${S.rng==r?'p':''}" onclick="S.rng='${r}';R()">${r=='live'?'● Live':r=='24h'?'24 hours':r=='7d'?'7 days':'30 days'}</button>`).join('')}</div></div>
+<svg viewBox="0 0 ${w} ${h+14}" style="width:100%"><g stroke="var(--bd)">${[0,50,100].map(v=>`<line x1="20" x2="${w-10}" y1="${h-8-v/100*(h-20)}" y2="${h-8-v/100*(h-20)}"/>`).join('')}</g><polyline fill="none" stroke="${c}" stroke-width="2.5" points="${pts.map(p=>p.join(',')).join(' ')}"/>${pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${c}"><title>${d[i][0]}: ${d[i][1]}%</title></circle><text x="${p[0]}" y="${h+10}" font-size="8" text-anchor="middle" fill="var(--mu)">${d[i][0]}</text>`).join('')}<text x="2" y="12" font-size="8" fill="var(--mu)">100</text></svg>
+<b>Risk Trend: ${dl>1?'↑ Increasing':dl<-1?'↓ Decreasing':'→ Stable'}</b> <span class="note">· current ${d[6][1]}% · demo data</span>`}
+function mapSvg(big){return`<svg class="map" viewBox="0 0 600 360" style="${big?'min-height:360px':''}"><defs><pattern id="gr" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="var(--bd)"/></pattern></defs><rect width="600" height="360" fill="url(#gr)"/><path d="M30 120 160 100 250 82 340 70 440 82 470 120 440 170 410 235 340 300 260 312 200 300 185 245 135 195 70 155Z" fill="var(--card)" stroke="var(--mu)" stroke-dasharray="4 3" opacity=".9"/>
+${vz().map(z=>{const r=risk(z),c=LV[r.lv][1],x=px(z),y=py(z),i=Z.indexOf(z);return`<g onclick="pick(${i})" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="${r.lv==3?26:19}" fill="${c}" opacity=".2" class="${r.lv==3?'pulse':''}"/><circle cx="${x}" cy="${y}" r="${S.sel==i?10:8}" fill="${c}" stroke="${S.sel==i?'var(--tx)':'#fff'}" stroke-width="2"><title>${z.n}: ${r.score}% ${LV[r.lv][0]}</title></circle><text x="${x}" y="${y-13}" text-anchor="middle">${z.n.split(' ')[0]} ${r.score}%</text></g>`}).join('')}</svg>
+<div class="row note" style="margin-top:6px">${LV.map(l=>`<span><b style="color:${l[1]}">●</b> ${l[0]}</span>`).join('')}<span>· Schematic NER view with simulated zones. Production build: Leaflet + OpenStreetMap tiles.</span></div>`}
+function actCard(z){const r=risk(z);return`<div class="card" style="border-top:4px solid ${LV[r.lv][1]}"><div class="row" style="justify-content:space-between"><h3>${['LOW','MODERATE','HIGH','CRITICAL'][r.lv]} RISK · Action Card</h3>${lb(r.lv)}</div><b>Risk Score: ${r.score}%</b><p style="margin:6px 0">${ACT[r.lv][0]}</p>${r.lv>=2?`<ol style="margin:0 0 8px;padding-left:18px">${STEPS.slice(0,r.lv==3?5:3).map(s=>`<li>${s}</li>`).join('')}</ol>`:''}<span class="note">System recommendation based on modelled inputs, not a guaranteed prediction. Confirm with local authorities.</span></div>`}
+function detail(z){const r=risk(z),d=ser(z,'live');return`<div class="card"><div class="row" style="justify-content:space-between"><h3 style="margin:0">${z.n}</h3>${lb(r.lv)}</div><div class="note">${z.s} · Last updated ${S.sync} · demo data</div><div style="font-size:34px;font-weight:800;color:${LV[r.lv][1]};margin:6px 0">${r.score}%</div><div class="kv"><div><small>Rainfall</small>${r.rain} mm / 24h</div><div><small>Soil Moisture</small>${r.soil}%</div><div><small>Slope</small>${z.sl}°</div><div><small>Historical Events</small>${z.h}</div></div><p style="margin:8px 0 0"><b>Risk Trend:</b> ${d[6][1]-d[3][1]>=2?'↑ Increasing':d[3][1]-d[6][1]>=2?'↓ Decreasing':'→ Stable'} · ${S.reps.some(x=>x.loc==z.n&&x.st!='Resolved')?'Status: Under field verification':'Status: Automated monitoring'}</p></div>`}
+function stats(){const v=vz(),rs=v.map(z=>risk(z).lv),o=[['Active Monitoring Zones',v.length],['High Risk Zones',rs.filter(x=>x==2).length],['Critical Zones',rs.filter(x=>x==3).length],['Active Alerts',S.alerts.filter(a=>a.st!='Resolved'&&a.st!='Auto-cleared').length],['Blocked Roads',1+rs.filter(x=>x==3).length],['Field Reports',S.reps.length]];
+return`<div class="g g6">${o.map(([l,n],i)=>`<div class="card stat"><b data-n="${n}" data-k="${i}">${n}</b><span>${l}</span></div>`).join('')}</div>`}
+const crit=()=>vz().filter(z=>risk(z).lv==3);
+function banner(){const c=crit();return c.length?`<div class="banner">⚠️ CRITICAL LANDSLIDE RISK · ${c.map(z=>z.n).join(', ')} · GIS warning active</div>`:''}
+function prio(){return vz().map(z=>{const r=risk(z);return{z,r,p:Math.round(r.score*(z.ex/3)*(z.inf/3))}}).sort((a,b)=>b.p-a.p)}
+const pages={
+dash(){const z=Z[S.sel];return wel()+banner()+stats()+`<div class="split" style="margin-top:12px"><div class="card"><h3>Live Risk Map</h3>${mapSvg()}</div><div class="g">${detail(z)}${actCard(z)}</div></div><div class="g g2" style="margin-top:12px"><div class="card">${trend(z)}</div><div class="card"><h3>Recent Field Reports</h3>${S.reps.slice(0,4).map(r=>`<div class="row" style="justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bd)"><span><b>${r.hz}</b> · ${r.loc}<br><small class="note">${r.id} · ${r.t}${r.pend?' · Pending Sync':''}</small></span><span class="tag">${r.st}</span></div>`).join('')}</div></div>`},
+map(){const z=Z[S.sel];return banner()+`<div class="split"><div class="card"><h3>Risk Map · ${S.reg}</h3>${mapSvg(1)}</div><div class="g">${detail(z)}${actCard(z)}</div></div>`},
+engine(){const z=Z[S.sel],r=risk(z),c=LV[r.lv][1],C=339.3;return banner()+`<div class="row" style="margin-bottom:10px"><b>Zone:</b><select style="width:auto" onchange="pick(+this.value)">${Z.map((q,i)=>`<option value="${i}" ${i==S.sel?'selected':''}>${q.n}</option>`).join('')}</select><button class="b" onclick="S.sel=0;setL(0)">Normal</button><button class="b p" onclick="S.sel=0;setL(1);toast('Heavy rainfall simulation applied')">Simulate Heavy Rainfall</button></div>
+<div class="g g2"><div class="card" style="text-align:center"><h3>AI LANDSLIDE RISK SCORE</h3><svg viewBox="0 0 140 140" width="200"><circle cx="70" cy="70" r="54" fill="none" stroke="var(--sf)" stroke-width="14"/><circle cx="70" cy="70" r="54" fill="none" stroke="${c}" stroke-width="14" stroke-linecap="round" stroke-dasharray="${r.score/100*C} ${C}" transform="rotate(-90 70 70)" style="transition:.5s"/><text x="70" y="76" text-anchor="middle" font-size="30" font-weight="800" fill="var(--tx)">${r.score}%</text></svg><div>${lb(r.lv)}</div><div style="text-align:left;margin-top:12px">${KS.map((k,i)=>`<div class="bar"><span>${k}</span><i><u style="width:${r.f[i]}%;background:${c}"></u></i><b>${Math.round(r.f[i])}%</b></div>`).join('')}</div></div>
+<div class="g"><div class="card"><h3>Why did the risk change?</h3><p style="margin:0">${why(z)}</p><label>Simulated rainfall intensity: ${Math.round(S.lvl*100)}%</label><input type="range" min="0" max="1" step=".05" value="${S.lvl}" onchange="setL(+this.value)"></div>${actCard(z)}
+<div class="card"><h3>Model · <span class="tag">Prototype Model</span></h3><p class="note" style="margin:0 0 6px">Weighted explainable scoring stands in for the planned Random Forest / Gradient Boosting model (scikit-learn). Sample data only. Accuracy: not evaluated. Production AI Model: pending trained data.</p><pre>X = [rainfall, soil_moisture, slope,
+     historical_events, field_reports]
+y = risk_score → risk_category
+RandomForestRegressor().fit(X, y)</pre></div></div></div>`},
+iot(){const z=Z[S.sel],r=risk(z),j=()=>(Math.random()*2-1);const sn=[['Soil Moisture',r.soil,'%',70,85],['Rainfall',Math.round(r.rain/5+j()),'mm/hr',20,35],['Temperature',+(23+j()).toFixed(1),'°C',99,99],['Humidity',Math.min(99,Math.round(70+S.lvl*22+j())),'%',85,95],['Tilt',+(0.8+S.lvl*2.8+j()*.1).toFixed(1),'°',2,3.5]];
+const st=v=>v[1]>=v[4]?2:v[1]>=v[3]?1:0,N=[['Node 01',z.n,1],['Node 02','Gangtok NH10',1],['Node 03','Kohima Bypass',0]];
+return`<div class="g g2">${N.map((n,k)=>`<div class="card"><div class="row" style="justify-content:space-between"><h3 style="margin:0">ESP32 ${n[0]}</h3>${bd(n[2]?'ONLINE':'OFFLINE',n[2]?'#16a34a':'#6b7280')}</div><div class="note">${n[1]} · Last update ${n[2]?'moments ago':'42 min ago'} · simulated</div>${n[2]?`<div class="g g3" style="margin-top:8px">${sn.map(v=>{const s=st(v);return`<div class="kv" style="grid-template-columns:1fr"><div><small>${v[0]}</small><b style="font-size:18px">${v[1]}${v[2]}</b> ${bd(['Normal','Warning','Critical'][s],LV[s==0?0:s+1][1])}</div></div>`}).join('')}</div>`:'<p>No data. Sensor failure alert raised.</p>'}</div>`).join('')}</div><div class="card" style="margin-top:12px"><h3>Data pathway</h3><div class="flow">${['ESP32','Sensors','IoT Gateway','LANDSAFE AI','Risk Engine'].map((x,i)=>(i?'<span>↓</span>':'')+`<div>${x}</div>`).join('')}</div><p class="note">Sensor values are simulated from the selected zone. No hardware connected.</p></div>`},
+rep(){const z=Z[S.sel],ph=S.ph;return`<div class="g g2"><div class="card"><h3>Field Hazard Report</h3>
+<label>Hazard type</label><select id="hz">${['Ground Crack','Slope Movement','Road Blockage','Rockfall','Water Seepage','Other'].map(h=>`<option>${h}</option>`).join('')}</select>
+<label>Location (GPS)</label><div class="row"><select id="lc" style="flex:1">${Z.map(q=>`<option ${q==z?'selected':''}>${q.n}</option>`).join('')}</select><button class="b" onclick="gps()">Use GPS</button></div><div class="note" id="gp">${z.la}°N, ${z.lo}°E</div>
+<label>Severity</label><select id="sv"><option>Low</option><option>Medium</option><option>High</option></select><label>Date / time</label><input type="datetime-local" id="dt" value="${new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16)}">
+<label>Photo</label><input type="file" accept="image/*" onchange="photo(this)"><label>Description</label><textarea id="ds" rows="3" placeholder="What did you observe?"></textarea>
+<div class="row" style="margin-top:10px"><button class="b p" onclick="submitR()">Submit report</button>${S.net?'':bd('Offline: will be stored locally','#6b7280')}</div></div>
+<div class="g"><div class="card"><h3>Photo Analysis · <span class="tag">Prototype / demo AI analysis</span></h3>${ph?`<img src="${ph}" style="width:100%;max-height:170px;object-fit:cover;border-radius:10px"><div class="kv" style="margin-top:8px"><div><small>Detected</small>Ground Crack</div><div><small>Confidence</small>91%</div><div><small>Potential Hazard</small>Slope Instability</div><div><small>Source</small>Simulated</div></div><div class="warn">Result is fixed demo output. No trained computer-vision model is connected.</div>`:'<p class="note">Upload a photo to see the simulated analysis. No photo yet.</p>'}</div></div></div>
+<div class="card sc" style="margin-top:12px"><h3>Report history</h3><table><tr><th>Report ID</th><th>Location</th><th>Hazard</th><th>Severity</th><th>Submitted</th><th>Status</th></tr>${S.reps.map(r=>`<tr><td>${r.id}</td><td>${r.loc}</td><td>${r.hz}</td><td>${r.sv}</td><td>${r.t}</td><td>${r.pend?'<span class="tag">Pending Sync · Stored locally</span>':`<span class="tag">${r.st}</span>`}</td></tr>`).join('')}</table></div>`},
+alerts(){const ic={'Moderate Risk':'🟡','High Risk':'🟠','Critical Risk':'🔴','Sensor Failure':'📡','Road Blockage':'🛣','Field Report':'📷','SOS':'🆘'};
+return banner()+`<div class="card"><div class="row"><h3 style="margin:0">Multilingual alert preview</h3><select style="width:auto" onchange="S.lang=this.value;R()">${[['en','English'],['hi','Hindi'],['as','Assamese'],['bn','Bengali']].map(l=>`<option value="${l[0]}" ${S.lang==l[0]?'selected':''}>${l[1]}</option>`).join('')}</select><button class="b" ${S.net?'':'disabled'} onclick="toast('Demo only: no real notification sent')">Send test (demo)</button></div><p style="font-size:16px;margin:10px 0 4px">${MSG[S.lang]}</p><span class="note">Message preview only. No real emergency notifications are sent; no notification service is connected. ${S.net?'':'Cloud actions disabled while offline.'}</span></div><div style="margin-top:12px">${S.alerts.length?S.alerts.map(a=>`<div class="card al" style="border-color:${a.lv!=null?LV[a.lv][1]:'#6b7280'}"><div class="row" style="justify-content:space-between"><b>${ic[a.type]} ${a.type} · ${a.zone}</b><span class="tag">${a.st}</span></div><div class="note">${a.time} · Risk level: ${a.lv!=null?LV[a.lv][0]:'n/a'}</div><div>${a.reason}</div><div><b>Recommended:</b> ${a.act}</div><div class="row" style="margin-top:6px"><button class="b" onclick="al(${a.id},'Acknowledged')">Acknowledge</button><button class="b" ${S.net?'':'disabled'} onclick="al(${a.id},'Assigned')">Assign</button><button class="b" onclick="al(${a.id},'Resolved')">Resolve</button></div></div>`).join(''):'<div class="card">No alerts. Run the demo to generate some.</div>'}</div>`},
+prio(){return banner()+`<div class="card"><h3>Emergency Priority Queue</h3><div class="warn">Prototype prioritization model: Priority = Risk × Exposure × Infrastructure importance. Not a validated operational ranking.</div>${prio().slice(0,6).map((q,i)=>`<div class="row" style="padding:10px 0;border-bottom:1px solid var(--bd)"><b style="font-size:20px;width:34px">${i+1}</b><div style="flex:1;min-width:200px"><b>${q.z.n}</b> ${lb(q.r.lv)}<br><span class="note">Risk ${q.r.score}% · Exposure ${EX[q.z.ex]} · ${IN[q.z.inf]} (${q.z.rd})</span></div><div><b>Action:</b> ${q.r.lv==3?'Immediate Field Inspection':q.r.lv==2?'Road Monitoring':'Slope Monitoring'}<br><span class="note">Score ${q.p}</span></div></div>`).join('')}</div>`},
+ana(){const v=vz().filter(z=>S.lf==null||S.lf==''||risk(z).lv==S.lf),rs=v.map(z=>risk(z)),cnt=[0,1,2,3].map(l=>rs.filter(r=>r.lv==l).length),T=v.length||1;let o=0;
+const hz=['Rockfall','Road Blockage','Water Seepage','Ground Crack','Slope Movement','Other'].map(h=>[h,S.reps.filter(r=>r.hz==h).length]);
+const bars=(a,m,c)=>a.map(x=>`<div class="bar"><span>${x[0]}</span><i><u style="width:${x[1]/m*100}%;background:${c||'var(--ac)'}"></u></i><b>${x[1]}</b></div>`).join('');
+return`<div class="card row"><b>Filters</b><select style="width:auto" onchange="S.reg=this.value;R()">${ST.map(s=>`<option ${s==S.reg?'selected':''}>${s}</option>`).join('')}</select><select style="width:auto"><option>District: All (sample)</option></select><select style="width:auto"><option>Last 30 days</option><option>Last 7 days</option></select><select style="width:auto" onchange="S.lf=this.value;R()"><option value="">All risk levels</option>${LV.map((l,i)=>`<option value="${i}" ${S.lf==i&&S.lf!==''?'selected':''}>${l[0]}</option>`).join('')}</select></div>
+<div class="g g2" style="margin-top:12px"><div class="card"><h3>Risk distribution</h3><div class="row"><svg viewBox="0 0 100 100" width="130">${cnt.map((n,l)=>{const d=n/T*251.3,e=`<circle cx="50" cy="50" r="40" fill="none" stroke="${LV[l][1]}" stroke-width="16" stroke-dasharray="${d} 251.3" stroke-dashoffset="${-o}" transform="rotate(-90 50 50)"/>`;o+=d;return e}).join('')}</svg><div>${cnt.map((n,l)=>`<div>${lb(l)} ${n}</div>`).join('')}</div></div></div>
+<div class="card"><h3>High-risk zones</h3>${bars(v.map((z,i)=>[z.n,risk(z).score]).sort((a,b)=>b[1]-a[1]).slice(0,5),100,'#f97316')}</div>
+<div class="card"><h3>Rainfall vs risk</h3><svg viewBox="0 0 300 140" style="width:100%"><line x1="25" y1="120" x2="290" y2="120" stroke="var(--mu)"/><line x1="25" y1="10" x2="25" y2="120" stroke="var(--mu)"/>${v.map(z=>{const r=risk(z);return`<circle cx="${25+r.rain/220*260}" cy="${120-r.score}" r="5" fill="${LV[r.lv][1]}"><title>${z.n}</title></circle>`}).join('')}<text x="150" y="136" font-size="8" fill="var(--mu)" text-anchor="middle">Rainfall (mm/24h)</text></svg></div>
+<div class="card"><h3>Soil moisture vs risk</h3><svg viewBox="0 0 300 140" style="width:100%"><line x1="25" y1="120" x2="290" y2="120" stroke="var(--mu)"/><line x1="25" y1="10" x2="25" y2="120" stroke="var(--mu)"/>${v.map(z=>{const r=risk(z);return`<circle cx="${25+r.soil/100*260}" cy="${120-r.score}" r="5" fill="${LV[r.lv][1]}"><title>${z.n}</title></circle>`}).join('')}<text x="150" y="136" font-size="8" fill="var(--mu)" text-anchor="middle">Soil moisture (%)</text></svg></div>
+<div class="card"><h3>Historical incidents <span class="tag">sample data</span></h3><div style="display:flex;align-items:flex-end;gap:4px;height:100px">${[2,1,3,6,14,22,31,27,12,5,2,1].map((n,i)=>`<div title="${n}" style="flex:1;background:var(--ac);height:${n*3}px;border-radius:4px 4px 0 0"></div>`).join('')}</div><div class="note">Jan → Dec, monsoon peak (illustrative)</div></div>
+<div class="card"><h3>Field reports by hazard</h3>${bars(hz,Math.max(1,...hz.map(h=>h[1])))}<div class="note">Blocked roads: ${1+cnt[3]} (demo)</div></div></div>`},
+src(){const d=[['Rainfall Data','Simulated'],['Soil Moisture Sensors','Simulated'],['Terrain/Slope Data','Pending Integration'],['Historical Landslide Records','Pending Integration'],['Satellite/Environmental Data','Pending Integration'],['Field Reports','Connected']],c={Connected:'#16a34a',Simulated:'#eab308','Pending Integration':'#6b7280'};
+return`<div class="g g3">${d.map(x=>`<div class="card"><h3>${x[0]}</h3>${bd(x[1],c[x[1]])}</div>`).join('')}</div><p class="note">Connected = in-app only. No external live API is connected in this prototype.</p>`},
+arch(){const f=a=>`<div class="flow">${a.map((x,i)=>(i?'<span>↓</span>':'')+`<div>${x}</div>`).join('')}</div>`;return`<div class="g g2"><div class="card"><h3>System pipeline</h3>${f(['Data Sources','Data Collection','Data Preprocessing','AI/ML Risk Engine','Risk Score','GIS Visualization','Risk-to-Action Engine','Alert System','Authorities / Field Officers / Communities'])}</div><div class="g"><div class="card"><h3>IoT pathway</h3><div class="row"><b>ESP32 → Sensors → Gateway → Cloud/API → AI Engine</b></div></div><div class="card"><h3>Planned stack</h3><p style="margin:0">React + TypeScript, Tailwind, Leaflet/OSM, Recharts · FastAPI · PostgreSQL/Firebase · scikit-learn · ESP32. Tables: users, regions, monitoring_zones, sensor_data, risk_predictions, field_reports, alerts, historical_events.</p></div></div></div>`},
+set(){return`<div class="g g2"><div class="card"><h3>Role-based access</h3><p>Signed in as <b>${S.role}</b>.</p><p class="note">Sidebar changes by role. Credentials are checked in the browser in this build (demo only); real enforcement needs server-side auth, as in the Nuxt project.</p></div><div class="card"><h3>Privacy</h3><p style="margin:0">Reports show IDs and zone only; no reporter names or phone numbers are displayed. Photos stay on the device in this demo.</p></div></div>`}};
+function al(id,s){const a=S.alerts.find(x=>x.id==id);a.st=s;toast('Alert '+s.toLowerCase());R()}
+function photo(el){const f=el.files[0];if(f){S.ph=URL.createObjectURL(f);R();toast('Demo analysis complete')}}
+function gps(){const set=t=>document.getElementById('gp').textContent=t;if(navigator.geolocation)navigator.geolocation.getCurrentPosition(p=>set(p.coords.latitude.toFixed(4)+'°N, '+p.coords.longitude.toFixed(4)+'°E'),()=>set('GPS unavailable: using zone coordinates'));else set('GPS unavailable')}
+function submitR(){const g=i=>document.getElementById(i).value,loc=g('lc'),z=Z.find(q=>q.n==loc),h=g('hz');
+S.reps.unshift({id:'LR-'+(1044+S.reps.length),loc,hz:h,sv:g('sv'),t:now(),st:'Pending',pend:S.net?0:1,tk:0});z.rp++;
+addA({zone:loc,type:'Field Report',lv:null,reason:h+' reported by field officer ('+g('sv')+' severity).',act:'Verify report and update monitoring status.'});chk();S.ph=null;
+toast(S.net?'Report successfully received.':'Stored locally · Pending Sync');R()}
+function R(){document.getElementById('lg').style.display=S.user?'none':'grid';if(!S.user)return;if(!ROLE[S.role].includes(S.page))S.page='dash';const ok=ROLE[S.role];document.getElementById('nav').innerHTML=PG.filter(p=>ok.includes(p[0])).map(p=>`<button class="${S.page==p[0]?'on':''}" onclick="go('${p[0]}')"><i>${p[2]}</i>${p[1]}</button>`).join('');
+document.getElementById('top').innerHTML=`<h2 style="margin:0;font-size:18px">${PG.find(p=>p[0]==S.page)[1]}</h2><span class="tag">Prototype · demo data</span><span class="sp"></span><select style="width:auto" onchange="S.reg=this.value;R()">${ST.map(s=>`<option ${s==S.reg?'selected':''}>${s}</option>`).join('')}</select><button class="b" onclick="S.live=!S.live;toast(S.live?'Live feed resumed':'Live feed paused');R()">${S.live&&S.net?'<span style="color:#16a34a">●</span> LIVE feed':'⏸ Feed paused'}</button><button class="b" ${S.net?'':'disabled'} onclick="storm()">⛈ Storm cell</button><button class="b" onclick="net()" title="Toggle network demo">${S.net?'🟢 ONLINE · Last sync '+S.sync:'🔴 OFFLINE MODE'+(S.reps.some(r=>r.pend)?' · '+S.reps.filter(r=>r.pend).length+' pending':'')}</button><button class="b p" onclick="demo()">${S.demo?'Stop demo':S.lvl>=1?'Reset & replay demo':'START LIVE DEMO'}</button><span class="tag sens">${S.name||S.user} · ${S.role}</span><button class="b" onclick="logout()">Sign out</button>`;
+document.getElementById('pg').innerHTML=pages[S.page]();
+document.querySelectorAll('[data-n]').forEach(e=>{const k=e.dataset.k,to=+e.dataset.n,from=P[k]==null?0:P[k];P[k]=to;if(from==to)return;const t0=performance.now();(function s(t){const p=Math.min(1,(t-t0)/500);e.textContent=Math.round(from+(to-from)*p);if(p<1)requestAnimationFrame(s)})(t0)})}
+function tl(){return new Date().toLocaleTimeString([],{hour12:false})}
+function storm(){const z=Z[S.sel];z.dr+=45;chk();toast('Storm cell injected at '+z.n+' (simulated)');R()}
+function tick(){if(!S.live||!S.net||!S.user)return;
+Z.forEach(z=>{z.dr=Math.max(-10,Math.min(80,z.dr*.96+(Math.random()-.47)*5));z.ds+=((z.dr/80)*14-z.ds)*.15+(Math.random()-.5)*.6;z.hist.push([tl(),risk(z).score]);if(z.hist.length>40)z.hist.shift()});
+if(Math.random()<.06){const v=vz(),z=v[Math.floor(Math.random()*v.length)];if(z){z.dr+=45;toast('Storm cell detected near '+z.n+' (simulated)')}}
+S.sync=now();S.reps.forEach(r=>{if(r.tk!=null&&r.st=='Pending'&&!r.pend&&++r.tk>8){r.st='Verified';toast(r.id+' verified (simulated review)')}});chk();
+const a=document.activeElement;if(a&&/INPUT|SELECT|TEXTAREA/.test(a.tagName)||['rep','set','sos','me','rec','aud','priv'].includes(S.page))return;R()}
+Z.forEach(z=>{z.dr=0;z.ds=0;z.pl=risk(z).lv;z.hist=Array(7).fill(0).map(()=>[tl(),risk(z).score])});
+S.alerts=[{id:1,zone:'Gangtok NH10',type:'Road Blockage',lv:null,time:'07:42',st:'Acknowledged',reason:'Debris on road reported by field team.',act:'Dispatch clearing crew and set diversion.'},{id:2,zone:'Kohima Bypass',type:'Sensor Failure',lv:null,time:'08:15',st:'New',reason:'ESP32 Node 03 stopped reporting.',act:'Inspect node power and gateway link.'}];
+const ACC={admin:['admin123','Admin'],officer:['officer123','Disaster Management Officer'],field:['field123','Field Officer'],citizen:['citizen123','Citizen']};
+let U={};try{U=JSON.parse(localStorage.getItem('ls_users')||'{}')}catch(x){}
+const svU=()=>{try{localStorage.setItem('ls_users',JSON.stringify(U))}catch(x){toast('Could not save account in this browser')}};
+async function hs(p){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('ls:'+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(x){return'p:'+p}}
+const gi=i=>document.getElementById(i);
+function tog(){S.su=!S.su;gi('sf').style.display=gi('sf2').style.display=S.su?'block':'none';gi('lsb').textContent=S.su?'Create account':'Sign in';gi('lst').textContent=S.su?'Have an account? Sign in':'New user? Create an account';gi('le').textContent='';gi('lp').autocomplete=S.su?'new-password':'current-password'}
+function auth(e){e.preventDefault();doAuth();return false}
+async function doAuth(){const er=m=>gi('le').textContent=m,u=gi('lu').value.trim().toLowerCase(),p=gi('lp').value;
+if(S.su){const n=gi('ln').value.trim();if(!n)return er('Enter your full name');if(!/^[a-z0-9_]{3,20}$/.test(u))return er('Username: 3-20 letters, numbers or _');if(Object.hasOwn(ACC,u)||Object.hasOwn(U,u))return er('That username is already taken');if(p.length<6)return er('Password must be at least 6 characters');if(p!==gi('lp2').value)return er('Passwords do not match');
+U[u]={n,r:gi('lr').value,h:await hs(p),c:new Date().toLocaleDateString()};svU();S.nu=1;return enter(u,'Welcome to LANDSAFE AI, '+n.split(' ')[0]+'! Your account is ready.')}
+const a=Object.hasOwn(ACC,u)&&ACC[u];if(a){if(a[0]!==p)return er('Invalid credentials');return enter(u)}
+const r=Object.hasOwn(U,u)&&U[u];if(!r||r.h!==await hs(p))return er('Invalid credentials');enter(u)}
+function enter(u,m){const d=Object.hasOwn(ACC,u);S.user=u;S.role=d?ACC[u][1]:U[u].r;S.name=d?ACC[u][1]:U[u].n;S.page='dash';gi('le').textContent='';gi('lp').value='';gi('lp2').value='';if(S.su)tog();try{sessionStorage.setItem('ls_user',u)}catch(x){}R();if(m)toast(m)}
+function logout(){S.user=null;S.nu=0;try{sessionStorage.removeItem('ls_user')}catch(x){}R()}
+function wel(){return S.nu?`<div class="card" style="margin-bottom:12px;border-left:4px solid var(--ac)"><h3>Welcome, ${S.name}! 👋</h3><ol style="margin:0 0 8px;padding-left:18px"><li>Tap a zone on the Risk Map to see its live score.</li><li>Use <b>Safety Check-in</b> to tell responders you are safe or need help.</li><li>Plan travel with <b>Safe Route</b> before you head out.</li></ol><button class="b p" onclick="S.nu=0;R()">Got it</button></div>`:''}
+S.ci=[{z:'Gangtok NH10',s:'Safe',t:'08:02'},{z:'Gangtok NH10',s:'Evacuating',t:'08:11'},{z:'Cherrapunji Gorge',s:'Need help',t:'09:01'},{z:'Aizawl Ridge',s:'Safe',t:'07:35'},{z:'Guwahati Hills',s:'Safe',t:'07:50'},{z:'Kohima Bypass',s:'Safe',t:'08:30'}];
+S.alerts.push({id:3,zone:'Aizawl Ridge',type:'Road Blockage',lv:null,time:'06:30',st:'Resolved',reason:'Landslip cleared by road crew.',act:'Keep monitoring slope after rain.'},{id:4,zone:'Cherrapunji Gorge',type:'Field Report',lv:null,time:'09:07',st:'Acknowledged',reason:'Water Seepage reported by field officer (Medium severity).',act:'Verify report and update monitoring status.'});
+function chkin(s){const z=S.cz||Z[S.sel].n;S.ci.unshift({z,s,t:now(),by:S.user});if(s=='Need help')addA({zone:z,type:'SOS',lv:null,reason:'Community SOS check-in received.',act:'Contact the area and dispatch the nearest field team.'});toast(s=='Need help'?'SOS sent to officers (demo only)':'Check-in recorded: '+s);R()}
+pages.sos=()=>{const c=S.ci,n=k=>c.filter(x=>x.s==k).length,col={Safe:'#16a34a',Evacuating:'#eab308','Need help':'#dc2626'};
+return banner()+`<div class="g g2"><div class="card"><h3>Safety Check-in</h3><label>Your zone</label><select onchange="S.cz=this.value">${Z.map(q=>`<option ${q.n==(S.cz||Z[S.sel].n)?'selected':''}>${q.n}</option>`).join('')}</select><div class="row" style="margin-top:10px"><button class="b" onclick="chkin('Safe')">✅ I am safe</button><button class="b" onclick="chkin('Evacuating')">🚶 Evacuating</button><button class="b p" style="background:#dc2626;border-color:#dc2626" onclick="chkin('Need help')">🆘 Need help</button></div><p class="note">Check-ins are anonymous. Need help raises an SOS alert for officers. Demo only: no emergency service is contacted.</p></div>
+<div class="card"><h3>Community pulse</h3><div class="kv" style="grid-template-columns:repeat(3,1fr)">${['Safe','Evacuating','Need help'].map(k=>`<div><small>${k}</small><b style="font-size:22px;color:${col[k]}">${n(k)}</b></div>`).join('')}</div></div></div>
+<div class="card sc" style="margin-top:12px"><h3>Recent check-ins</h3><table><tr><th>Time</th><th>Zone</th><th>Status</th></tr>${c.slice(0,10).map(x=>`<tr><td>${x.t}</td><td>${x.z}</td><td>${bd(x.s,col[x.s])}</td></tr>`).join('')}</table></div>`};
+pages.route=()=>{const a=Z[S.rf??0],b=Z[S.rt??2],dx=b.lo-a.lo,dy=b.la-a.la,L2=dx*dx+dy*dy||1;
+const on=Z.map(z=>{const t=Math.max(0,Math.min(1,((z.lo-a.lo)*dx+(z.la-a.la)*dy)/L2)),d=Math.hypot(z.lo-(a.lo+t*dx),z.la-(a.la+t*dy));return{z,t,d,r:risk(z)}}).filter(o=>o.d<.45||o.z==a||o.z==b).sort((p,q)=>p.t-q.t);
+const mx=Math.max(...on.map(o=>o.r.score)),av=Math.round(on.reduce((s,o)=>s+o.r.score,0)/on.length),sc=Math.round(mx*.6+av*.4),lv=sc<30?0:sc<55?1:sc<75?2:3,c=LV[lv][1];
+const km=Math.round(Math.hypot(dx*111*Math.cos(a.la*Math.PI/180),dy*111)*1.4),eta=(km/35*(1+lv*.35)).toFixed(1);
+const sel=(k,v)=>`<select style="width:auto" onchange="S.${k}=+this.value;R()">${Z.map((q,i)=>`<option value="${i}" ${i==v?'selected':''}>${q.n}</option>`).join('')}</select>`;
+return banner()+`<div class="card row"><b>From</b>${sel('rf',S.rf??0)}<b>To</b>${sel('rt',S.rt??2)}</div><div class="g g2" style="margin-top:12px"><div class="card" style="border-top:4px solid ${c}"><h3>Route verdict</h3><div style="font-size:24px;font-weight:800;color:${c}">${['GO','GO WITH CARE','AVOID IF POSSIBLE','DO NOT TRAVEL'][lv]}</div><div class="kv" style="margin-top:8px"><div><small>Route risk</small>${sc}%</div><div><small>Approx. distance</small>~${km} km</div><div><small>Est. travel time</small>${eta} h</div><div><small>Zones on route</small>${on.length}</div></div><p class="note">Combines the worst zone (60%) and the average (40%) along a straight-line corridor. Prototype estimate, not navigation. Follow local advisories.</p></div>
+<div class="card"><h3>Route map</h3><svg class="map" viewBox="0 0 600 360"><line x1="${px(a)}" y1="${py(a)}" x2="${px(b)}" y2="${py(b)}" stroke="${c}" stroke-width="3" stroke-dasharray="7 5"/>${on.map(o=>`<circle cx="${px(o.z)}" cy="${py(o.z)}" r="8" fill="${LV[o.r.lv][1]}" stroke="#fff" stroke-width="2"><title>${o.z.n}</title></circle><text x="${px(o.z)}" y="${py(o.z)-12}" text-anchor="middle">${o.z.n.split(' ')[0]}</text>`).join('')}</svg></div></div>
+<div class="card" style="margin-top:12px"><h3>Stops along the route</h3>${on.map((o,i)=>`<div class="row" style="justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd)"><span><b>${i+1}. ${o.z.n}</b> <span class="note">${o.z.rd}</span></span><span>${o.r.score}% ${lb(o.r.lv)}</span></div>`).join('')}</div>`};
+pages.me=()=>{const u=S.user,r=U[u],mine=S.ci.filter(x=>x.by==u).length;
+return`<div class="g g2"><div class="card"><div class="row"><div style="width:54px;height:54px;border-radius:50%;background:var(--ac);color:#fff;display:grid;place-items:center;font-size:24px;font-weight:700">${(S.name||u)[0].toUpperCase()}</div><div><b style="font-size:17px">${S.name}</b><br><span class="note">@${u}</span></div></div><div class="kv" style="margin-top:12px"><div><small>Role</small>${S.role}</div><div><small>Member since</small>${r?r.c:'Demo account'}</div><div><small>My check-ins</small>${mine}</div><div><small>Reports in system</small>${S.reps.length}</div></div>${r?`<button class="b" style="margin-top:12px;color:#dc2626" onclick="if(confirm('Delete this account from this browser?')){delete U[S.user];svU();logout()}">Delete my account</button>`:''}</div>
+<div class="card"><h3>What you can access</h3><div class="row">${ROLE[S.role].map(p=>`<span class="tag">${PG.find(x=>x[0]==p)[1]}</span>`).join('')}</div><p class="note">Access is set by role. Self-registered accounts are limited to Citizen or Field Officer.</p></div></div>`};
+/* v2: records, audit, privacy, citizen limits */
+function fnv(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(16).padStart(8,'0')}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+S.au=[];S.q='';S.fs='';S.ex='';S.mx='';S.pv={coarse:1,link:0,hide:0,idle:10};
+const CZ=()=>S.role=='Citizen',STF=()=>S.role=='Admin'||S.role=='Disaster Management Officer';
+function lg(a){const p=S.au.length?S.au[0].h:'GENESIS',t=new Date().toLocaleString(),u=S.user||'-';S.au.unshift({t,u,r:S.role,a,h:fnv(p+'|'+t+'|'+u+'|'+a)})}
+function chainOk(){return S.au.every((e,i)=>e.h==fnv((S.au[i+1]?S.au[i+1].h:'GENESIS')+'|'+e.t+'|'+e.u+'|'+e.a))}
+function pvLoad(){try{Object.assign(S.pv,JSON.parse(localStorage.getItem('ls_pv_'+S.user)||'{}'))}catch(x){}document.body.classList.toggle('pm',!!S.pv.hide)}
+function pvSet(k,v){S.pv[k]=v;try{localStorage.setItem('ls_pv_'+S.user,JSON.stringify(S.pv))}catch(x){}document.body.classList.toggle('pm',!!S.pv.hide);lg('Privacy setting '+k+'='+v);R()}
+const _en=enter,_lo=logout,_al=al,_sr=submitR,_ck=chkin,_gp=gps,_dt=detail,_ac=actCard,_pr=pages.rep,_pd=pages.dash,_pa=pages.alerts,_R=R;
+enter=(u,m)=>{_en(u,m);pvLoad();lg('Signed in')};
+logout=()=>{lg('Signed out');_lo()};
+al=(i,s)=>{lg('Alert #'+i+' '+s);_al(i,s)};
+submitR=()=>{const n=S.reps.length;_sr();if(S.reps.length>n){S.reps[0].by=S.user;lg('Report '+S.reps[0].id+' submitted');R()}};
+chkin=s=>{_ck(s);if(!S.pv.link&&S.ci[0])delete S.ci[0].by;lg('Check-in: '+s)};
+gps=()=>S.pv.coarse?gi('gp').textContent='Zone-level location only (privacy setting)':_gp();
+const ADV=['No action needed. Stay informed through official channels.','Stay alert and avoid steep slopes during heavy rain.','Avoid travel near slopes and roads here. Follow local authority instructions.','Be ready to move to safer ground. Follow evacuation orders and call your local emergency number.'];
+detail=z=>{if(!CZ())return _dt(z);const r=risk(z);return`<div class="card"><div class="row" style="justify-content:space-between"><h3 style="margin:0">${z.n}</h3>${lb(r.lv)}</div><div class="note">${z.s} · Updated ${S.sync} · demo data</div><p>Sensor readings and risk scores are limited to officers.</p></div>`};
+actCard=z=>{if(!CZ())return _ac(z);const r=risk(z);return`<div class="card" style="border-top:4px solid ${LV[r.lv][1]}"><h3>Public advisory</h3><p style="margin:0 0 6px">${ADV[r.lv]}</p><span class="note">Based on modelled inputs, not a guarantee. Confirm with local authorities.</span></div>`};
+const own=f=>{if(!CZ())return f();const a=S.reps;S.reps=a.filter(r=>r.by==S.user);try{return f()}finally{S.reps=a}};
+pages.rep=()=>own(_pr);pages.dash=()=>own(_pd);
+pages.alerts=()=>{if(!CZ())return _pa();const a=S.alerts;S.alerts=a.filter(x=>['Moderate Risk','High Risk','Critical Risk','Road Blockage'].includes(x.type));try{return _pa().replace(/<div class="row" style="margin-top:6px">.*?<\/button><\/div>/g,'')}finally{S.alerts=a}};
+R=()=>{_R();if(S.user&&CZ()){document.querySelectorAll('#top button').forEach(b=>/Storm|demo|feed/i.test(b.textContent)&&b.remove());gi('top').insertAdjacentHTML('beforeend','<span class="tag">Limited citizen access</span>')}};
+const pse=r=>'Reporter-'+fnv((r.by||r.id)+'k').slice(0,4).toUpperCase();
+function recRows(){const q=S.q.toLowerCase(),v=S.reps.filter(r=>(!S.fs||r.st==S.fs)&&(!q||(r.id+r.loc+r.hz+r.st).toLowerCase().includes(q)));
+return`<table><tr><th>ID</th><th>Zone</th><th>Hazard</th><th>Severity</th><th>Time</th><th>Reporter</th><th>Status</th><th></th></tr>${v.map(r=>`<tr><td>${r.id}</td><td>${r.loc}</td><td>${r.hz}</td><td>${r.sv}</td><td>${r.t}</td><td><span class="sens">${STF()?pse(r):'Hidden'}</span></td><td><span class="tag">${r.st}</span></td><td>${r.st=='Pending'?`<button class="b" onclick="rs('${r.id}','Verified')">Verify</button>`+(STF()?` <button class="b" onclick="rs('${r.id}','Rejected')">Reject</button>`:''):STF()&&r.st=='Verified'?`<button class="b" onclick="rs('${r.id}','Resolved')">Resolve</button>`:''}</td></tr>`).join('')||'<tr><td colspan="8">No records match.</td></tr>'}</table>`}
+function rs(id,s){const r=S.reps.find(x=>x.id==id);r.st=s;lg('Record '+id+' set to '+s);toast(id+' marked '+s);R()}
+function csv(){S.ex=['id,zone,hazard,severity,time,reporter,status',...S.reps.map(r=>[r.id,r.loc,r.hz,r.sv,r.t,pse(r),r.st].join(','))].join('\n');lg('Exported '+S.reps.length+' records (CSV)');R()}
+pages.rec=()=>`<div class="card"><div class="row"><input style="flex:1;min-width:180px" placeholder="Search ID, zone, hazard" aria-label="Search records" value="${esc(S.q)}" oninput="S.q=this.value;gi('rt').innerHTML=recRows()"><select style="width:auto" aria-label="Status filter" onchange="S.fs=this.value;R()">${['','Pending','Verified','Resolved','Rejected'].map(x=>`<option value="${x}" ${x==S.fs?'selected':''}>${x||'All statuses'}</option>`).join('')}</select>${STF()?'<button class="b" onclick="csv()">Export CSV</button>':''}</div><div class="warn">Reporter identities are pseudonymised${STF()?'':' and hidden for your role'}. Every status change and export is written to the audit log.</div></div><div class="card sc" style="margin-top:12px" id="rt">${recRows()}</div>${S.ex?`<div class="card" style="margin-top:12px"><h3>CSV export</h3><pre>${esc(S.ex)}</pre><button class="b" onclick="S.ex='';R()">Close</button></div>`:''}`;
+pages.aud=()=>`<div class="card"><div class="row"><b>Audit log</b><button class="b p" onclick="toast(chainOk()?'Chain intact: no entry altered':'TAMPERING DETECTED: chain broken')">Verify chain</button><button class="b" onclick="if(S.au.length>2){S.au[1].a+=' (edited)';toast('Entry edited for test. Now verify.')}">Tamper test (demo)</button></div><p class="note">Each entry stores a checksum of the one before it, so editing history breaks the chain. Demo checksum, not cryptographic. Kept in memory for this session only.</p></div><div class="card sc" style="margin-top:12px"><table><tr><th>Time</th><th>User</th><th>Role</th><th>Action</th><th>Checksum</th></tr>${S.au.slice(0,40).map(e=>`<tr><td>${e.t}</td><td>${esc(e.u)}</td><td>${e.r}</td><td>${esc(e.a)}</td><td><code>${e.h}</code></td></tr>`).join('')}</table></div>`;
+function myData(){S.mx=JSON.stringify({account:{user:S.user,role:S.role},reports:S.reps.filter(r=>r.by==S.user),checkins:S.ci.filter(x=>x.by==S.user),privacy:S.pv},null,1);lg('Viewed own data');R()}
+function eraseMine(){if(!confirm('Erase your reports and check-ins from this session?'))return;const n=S.reps.length+S.ci.length;S.reps=S.reps.filter(r=>r.by!=S.user);S.ci=S.ci.filter(x=>x.by!=S.user);S.mx='';lg('Erased own data ('+(n-S.reps.length-S.ci.length)+' items)');toast('Your data was erased');R()}
+pages.priv=()=>{const p=S.pv,sw=(k,l,d)=>`<label style="display:flex;gap:10px;align-items:flex-start;color:var(--tx);font-size:13px"><input type="checkbox" style="width:auto;margin-top:3px" ${p[k]?'checked':''} onchange="pvSet('${k}',this.checked?1:0)"><span><b>${l}</b><br><span class="note">${d}</span></span></label>`,mine=S.reps.filter(r=>r.by==S.user).length,ck=S.ci.filter(x=>x.by==S.user).length;
+return`<div class="g g2"><div class="card"><h3>Your privacy controls</h3>${sw('coarse','Share zone-level location only','The GPS button fills in the zone, not coordinates.')}${sw('link','Link check-ins to my account','Off by default: check-ins stay anonymous.')}${sw('hide','Hide names on screen','Blurs your name and reporter IDs on shared screens.')}<label for="idl">Auto sign-out after inactivity</label><select id="idl" onchange="pvSet('idle',+this.value)">${[[0,'Never'],[2,'2 minutes'],[5,'5 minutes'],[10,'10 minutes'],[30,'30 minutes']].map(o=>`<option value="${o[0]}" ${o[0]==p.idle?'selected':''}>${o[1]}</option>`).join('')}</select><p class="note">Saved in this browser only.</p></div>
+<div class="card"><h3>Your data</h3><div class="kv"><div><small>Reports linked to you</small>${mine}</div><div><small>Check-ins linked to you</small>${ck}</div></div><div class="row" style="margin-top:10px"><button class="b" onclick="myData()">View my data</button><button class="b" style="color:#dc2626" onclick="eraseMine()">Erase my reports and check-ins</button></div>${S.mx?`<pre>${esc(S.mx)}</pre>`:''}</div></div>
+<div class="card" style="margin-top:12px"><h3>Who can see what</h3><div class="sc"><table><tr><th>Information</th><th>Citizen</th><th>Field Officer</th><th>Officer / Admin</th></tr><tr><td>Zone risk level and advisory</td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td>Risk scores, sensors, model details</td><td>No</td><td>Partly</td><td>Yes</td></tr><tr><td>Other people's reports</td><td>No</td><td>Reporter hidden</td><td>Pseudonymised ID</td></tr><tr><td>Records register and CSV export</td><td>No</td><td>View and verify</td><td>Full, with export</td></tr><tr><td>Audit log</td><td>No</td><td>No</td><td>Admin only</td></tr></table></div><p class="note">Browser-only demo: these limits are enforced in the page, not on a server. A real deployment needs server-side access control.</p></div>`};
+let lastAct=Date.now();['click','keydown','mousemove','touchstart'].forEach(e=>addEventListener(e,()=>lastAct=Date.now(),{passive:true}));
+setInterval(()=>{const m=S.pv.idle;if(S.user&&m&&Date.now()-lastAct>m*6e4){logout();toast('Signed out after inactivity')}},5e3);
+/* ===== v3 JS: hero banners, equipment ===== */
+(function(){
+const HERO={dash:['⛰️','Command Centre','Live landslide intelligence for North East India',['16 zones','AI scoring','Live feed']],map:['🗺️','Risk Map','Tap any zone to inspect its score and action card',['Schematic NER','Pulse = critical']],engine:['✦','AI Risk Engine','Explainable scoring from rainfall, soil, slope, history and reports',['5 factors','Simulator']],iot:['📡','IoT Monitoring','ESP32 nodes streaming simulated sensor data',['3 nodes','5 sensors']],equip:['🛠️','Field Equipment','Sensors, comms, power and response hardware deployed per zone',['12 equipment types','Battery + signal','Per-zone live readings']],rep:['📷','Field Reports','Log hazards with GPS, photo and severity',['Offline ready']],rec:['🗂️','Records','Search, verify and export pseudonymised reports',['Audited']],alerts:['🚨','Alerts','Multilingual warnings and response workflow',['EN · हि · অসমীয়া · বাংলা']],sos:['🆘','Safety Check-in','Tell responders you are safe, evacuating or need help',['Anonymous']],route:['🧭','Safe Route','Score a journey by the zones along the way',['Go / Avoid / Do not travel']],prio:['⚡','Emergency Priority','Where responders should go first',['Risk × Exposure × Infrastructure']],ana:['📊','Analytics','Trends, distributions and hazard mix',['Filters']],src:['🛰️','Data Sources','What is connected, simulated or pending',['Prototype']],arch:['🏗️','System Architecture','Pipeline from sensor to alert',['End to end']],set:['⚙️','Settings','Access and privacy overview',[]],me:['👤','My Profile','Your account and access',[]],aud:['🔐','Audit Log','Tamper-evident activity chain',['Checksummed']],priv:['🛡️','Privacy Center','Control what is shared and kept',['You decide']]};
+const MT='<svg class="mt" viewBox="0 0 600 42" preserveAspectRatio="none"><path d="M0 42V28L60 12l50 18 70-26 70 30 80-22 80 24 70-20 60 16 60-14v36z" fill="var(--bg)" opacity=".55"/><path d="M0 42V34l80-16 60 14 90-20 90 20 90-14 80 14 110-12v22z" fill="var(--bg)"/></svg>';
+function hero(){const h=HERO[S.page];if(!h)return'';const rain=['dash','map','engine','alerts','equip','iot'].includes(S.page)?'<div class="rain"></div>':'';
+return`<div class="hero">${rain}<div class="ic">${h[0]}</div><h1>${h[1]}</h1><p>${h[2]}</p><div class="chips">${h[3].map(c=>`<span>${c}</span>`).join('')}</div>${MT}</div>`}
+
+/* equipment catalog: each reads from the zone's modelled risk */
+const j=(z,k)=>Math.sin(z.la*k+z.lo)*.5;
+const EQ=[
+{k:'rain',n:'Tipping-bucket rain gauge',ic:'🌧️',u:'mm/hr',f:(z,r)=>Math.round(r.rain/5+1+j(z,3)),w:20,c:35,d:'Rainfall intensity, 0.2 mm tip resolution'},
+{k:'pz',n:'Piezometer',ic:'💧',u:'kPa',f:(z,r)=>Math.round(8+r.soil*.55+j(z,5)*3),w:45,c:60,d:'Pore-water pressure at slip-surface depth'},
+{k:'inc',n:'In-place inclinometer',ic:'📐',u:'mm/day',f:(z,r)=>+(0.2+r.score*.035+j(z,7)*.1).toFixed(1),w:2,c:3.5,d:'Sub-surface slope movement rate'},
+{k:'ext',n:'Crack meter / extensometer',ic:'↔️',u:'mm',f:(z,r)=>+(1+r.score*.12+j(z,2)).toFixed(1),w:8,c:14,d:'Surface crack widening across a tension crack'},
+{k:'gnss',n:'GNSS displacement station',ic:'🛰️',u:'mm',f:(z,r)=>+(r.score*.09+j(z,4)*.3).toFixed(1),w:5,c:8,d:'Millimetre-level ground displacement'},
+{k:'geo',n:'Geophone (micro-seismic)',ic:'📈',u:'µm/s',f:(z,r)=>Math.round(r.score*.9+4+j(z,6)*4),w:55,c:80,d:'Rockfall and slope-failure vibration'},
+{k:'wx',n:'Weather station',ic:'🌡️',u:'°C',f:(z,r)=>+(22+j(z,1)*2-r.lv).toFixed(1),w:99,c:99,d:'Temperature, humidity, wind and pressure'},
+{k:'cam',n:'Slope camera (AI-ready)',ic:'📹',u:'fps',f:(z,r)=>r.lv==3?15:5,w:99,c:99,d:'Visual verification and change detection'},
+{k:'sir',n:'Warning siren + PA',ic:'📢',u:'',f:(z,r)=>r.lv==3?'TRIGGERED':'ARMED',w:99,c:99,d:'Local audible warning for the community'},
+{k:'pwr',n:'Solar + battery unit',ic:'🔋',u:'%',f:(z,r,i)=>Math.max(22,Math.round(96-i*4-r.lv*3)),w:-1,c:-1,d:'Power for the node, with low-battery alerts'},
+{k:'lora',n:'LoRa / GSM gateway',ic:'📶',u:'dBm',f:(z,r,i)=>-(62+(i*7)%28),w:-96,c:-110,d:'Uplink to the cloud when the network is weak'},
+{k:'drn',n:'Survey drone dock',ic:'🚁',u:'',f:(z,r)=>r.lv>=2?'READY TO LAUNCH':'DOCKED',w:99,c:99,d:'Post-event aerial survey of the slope'}];
+S.eoff=S.eoff||{};S.ez=S.ez??0;S.ef='all';
+function eqState(e,v,off){if(off)return 3;if(typeof v!=='number')return v=='TRIGGERED'?2:0;if(e.k=='pwr')return v<=e.w*-1&&0?0:v<30?2:v<50?1:0;if(e.k=='lora')return v<=e.c?2:v<=e.w?1:0;return v>=e.c?2:v>=e.w?1:0}
+const ESC=[['Normal','#16a34a'],['Warning','#eab308'],['Critical','#dc2626'],['Disabled','#6b7280']];
+function eqCards(zi){const z=Z[zi],r=risk(z);return EQ.map((e,ei)=>{const off=!!S.eoff[zi+e.k],v=e.f(z,r,zi),s=eqState(e,v,off),c=ESC[s][1],bat=Math.max(18,98-(zi*5+ei*3)%60);
+const val=off?'—':(typeof v=='number'?v+' '+e.u:v);
+return`<div class="card it ${s==2?'glow':''} ${off?'dis':''}"><div class="hd"><div class="ico">${e.ic}</div><div style="flex:1"><b>${e.n}</b><div class="note">${e.d}</div></div></div><div class="big" style="color:${c}">${val}</div><div class="meta">${bd(ESC[s][0],c)}<span class="tag">${z.n.split(' ')[0]}-${e.k.toUpperCase()}</span></div><div class="note">Battery ${bat}%</div><div class="batt"><u style="width:${bat}%;background:${bat<35?'#dc2626':bat<55?'#eab308':'#16a34a'}"></u></div><div class="row"><button class="b" onclick="eqTog(${zi},'${e.k}')">${off?'Enable':'Disable'}</button>${e.k=='sir'?`<button class="b" ${S.net?'':'disabled'} onclick="eqAct('Siren test (demo)')">Test siren</button>`:''}${e.k=='drn'?`<button class="b" ${S.net?'':'disabled'} onclick="eqAct('Drone survey requested (demo)')">Request survey</button>`:''}${e.k=='cam'?`<button class="b" onclick="eqAct('Snapshot requested (demo)')">Snapshot</button>`:''}</div></div>`}).join('')}
+function eqSummary(){let on=0,wn=0,cr=0,tot=0;vz().forEach(z=>{const i=Z.indexOf(z),r=risk(z);EQ.forEach(e=>{tot++;const off=S.eoff[i+e.k],s=eqState(e,e.f(z,r,i),off);if(off)return;on++;if(s==1)wn++;if(s==2)cr++})});return[tot,on,wn,cr]}
+window.eqTog=(zi,k)=>{S.eoff[zi+k]=!S.eoff[zi+k];lg((S.eoff[zi+k]?'Disabled ':'Enabled ')+k+' @ '+Z[zi].n);toast(Z[zi].n+': '+k+(S.eoff[zi+k]?' disabled':' enabled'));R()};
+window.eqAct=m=>{lg(m);toast(m)};
+pages.equip=()=>{const zi=S.ez,z=Z[zi],[t,on,wn,cr]=eqSummary();
+return banner()+`<div class="g g6"><div class="card stat"><b>${t}</b><span>Equipment units</span></div><div class="card stat"><b>${on}</b><span>Online</span></div><div class="card stat"><b>${wn}</b><span>Warnings</span></div><div class="card stat"><b>${cr}</b><span>Critical</span></div></div>
+<div class="card row" style="margin:12px 0"><b>Zone</b><select style="width:auto" onchange="S.ez=+this.value;R()">${Z.map((q,i)=>`<option value="${i}" ${i==zi?'selected':''}>${q.n}</option>`).join('')}</select><span class="note">${z.s} · ${LV[risk(z).lv][0]} · readings simulated from modelled risk</span></div><div class="eq">${eqCards(zi)}</div>
+<div class="warn" style="margin-top:12px">Prototype: equipment readings are simulated from the zone's modelled risk. No hardware is connected. Disabling a unit only changes this demo view and is written to the audit log.</div>`};
+const _io=pages.iot;pages.iot=()=>_io()+`<div class="card" style="margin-top:12px"><h3>More equipment on this node</h3><p class="note" style="margin-top:0">Piezometer, inclinometer, crack meter, GNSS, geophone, camera, siren, solar unit, LoRa gateway and drone dock.</p><button class="b p" onclick="go('equip')">Open Field Equipment</button></div>`;
+const ix=PG.findIndex(p=>p[0]=='iot');PG.splice(ix+1,0,['equip','Field Equipment','🛠']);
+ROLE['Admin'].splice(ix+1,0,'equip');ROLE['Disaster Management Officer'].splice(ix+1,0,'equip');ROLE['Field Officer'].splice(ROLE['Field Officer'].indexOf('iot')+1,0,'equip');
+/* ticker + hero on every render */
+const TK=()=>{const c=crit().map(z=>'🔴 CRITICAL '+z.n).concat(S.alerts.filter(a=>a.st=='New').slice(0,3).map(a=>'⚑ '+a.type+' · '+a.zone)).concat(['🟢 Gateway link OK','🔋 Solar units charging','📡 3 ESP32 nodes reporting','🌧 Rain gauges sampling']);return`<div class="ticker"><div>${TK2(TK_(c))}${TK2(TK_(c))}</div></div>`};
+const TK_=a=>a.map(x=>`<span>${esc(x)}</span>`).join(''),TK2=x=>x;
+const _R2=R;R=()=>{_R2();if(!S.user)return;document.body.dataset.pg=S.page;const pg=gi('pg');pg.insertAdjacentHTML('afterbegin',hero()+(['dash','map'].includes(S.page)&&!CZ()?TK():''))};
+document.querySelectorAll('.logo b').forEach(b=>b.insertAdjacentHTML('afterend',''));
+})();
+try{const u=sessionStorage.getItem('ls_user');if(u&&(Object.hasOwn(ACC,u)||Object.hasOwn(U,u)))enter(u)}catch(x){}
+R();setInterval(tick,2000);
+function dm(u){document.getElementById('lu').value=u;document.getElementById('lp').value=u+'123';document.getElementById('le').textContent='';document.getElementById('lp').focus()}
+</script></body></html>
